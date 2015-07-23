@@ -9,6 +9,9 @@ class Factory
 		// detect request method and url
 		$method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
 		$path = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
+		if (isset($config['domain_url_start_path'])) {
+			$path = $config['domain_url_start_path'];
+		} 
 
 		// parse the proxy url, and grab the directory
 		$proxyPath = parse_url($config['proxy_url'], PHP_URL_PATH);
@@ -57,7 +60,7 @@ class Factory
 
 		// run replacements over content
 		$res = new Response($content);
-		$res->setProxyPath($config['proxy_url'].'/');
+		$res->setProxyPath($config['proxy_url']);
 		$res->replaceDomainLinks($config['domain_url'].'/');
 		$res->replaceInternalHtmlLinks();
 		if ( stristr($path, '.css') ) {
